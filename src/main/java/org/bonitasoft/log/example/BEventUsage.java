@@ -13,7 +13,8 @@ public class BEventUsage {
     // declare events
     private final BEvent inputDivisionEvent = new BEvent(BEventUsage.class.getName(), 1, Level.INFO, "Calculate Division", "Run a division");
     private final BEvent resultDivisionEvent = new BEvent(BEventUsage.class.getName(), 2, Level.SUCCESS, "Division Done", "Result of the division");
-    private final BEvent errorDivisionEvent = new BEvent(BEventUsage.class.getName(), 3, Level.SUCCESS, "Division Done", "Result of the division");
+    private final BEvent errorDivisionEvent = new BEvent(BEventUsage.class.getName(), 3, Level.ERROR, "Division Error", "An error arrive in the division",
+            "The result is not available", "Check the number you give at input : divide by 0 is not possible for example");
 
     public class DivisionResult {
 
