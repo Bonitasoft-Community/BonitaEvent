@@ -227,18 +227,18 @@ public class BEvent {
     public String getHtml()
     {
         final StringBuffer htmlEvent = new StringBuffer();
-        htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\"><a href='#' class=\"");
+        htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\"><a href='#' ");
         if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
-            htmlEvent.append("label label-danger");
+            htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
         } else if (getLevel() == Level.APPLICATIONERROR) {
-            htmlEvent.append("label label-warning");
+            htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
         } else if (getLevel() == Level.SUCCESS) {
-            htmlEvent.append("label label-success");
+            htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
         } else {
-            htmlEvent.append("label label-info");
+            htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
         }
         htmlEvent.append("\" title=\"" + getKey() + "\"");
-        htmlEvent.append("\">" + getTitle());
+        htmlEvent.append(">" + getTitle());
         htmlEvent.append("</a>");
 
         if (getParameters() != null) {
