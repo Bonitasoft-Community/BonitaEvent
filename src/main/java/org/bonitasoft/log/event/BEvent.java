@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
-
 public class BEvent {
 
     /**
@@ -61,8 +59,8 @@ public class BEvent {
      * @deprecated use the constructor with the consequence explanation
      */
     @Deprecated
-    public BEvent(final String packageName, final long number, final Level level, final String title, final String cause, final String action)
-    {
+    public BEvent(final String packageName, final long number, final Level level, final String title,
+            final String cause, final String action) {
         mNumber = number;
         mLevel = level;
         mPackageName = packageName.trim();
@@ -75,9 +73,9 @@ public class BEvent {
 
     }
 
-    public BEvent(final String packageName, final long number, final Level level, final String title, final String cause, final String consequence,
-            final String action)
-    {
+    public BEvent(final String packageName, final long number, final Level level, final String title,
+            final String cause, final String consequence,
+            final String action) {
         mNumber = number;
         mLevel = level;
         mPackageName = packageName.trim();
@@ -89,15 +87,17 @@ public class BEvent {
         mReferenceEvent = null;
         mParameters = "";
     }
+
     /**
      * constructor for normal event (info, success, debug)
+     * 
      * @param packageName
      * @param number
      * @param level
      * @param title
      */
-    public BEvent(final String packageName, final long number, final Level level, final String title, final String cause)
-    {
+    public BEvent(final String packageName, final long number, final Level level, final String title,
+            final String cause) {
         mNumber = number;
         mLevel = level;
         mPackageName = packageName.trim();
@@ -115,14 +115,12 @@ public class BEvent {
      * @param referenceEvent
      * @param parameters
      */
-    public BEvent(final BEvent referenceEvent, final String parameters)
-    {
+    public BEvent(final BEvent referenceEvent, final String parameters) {
         mReferenceEvent = referenceEvent;
         mParameters = parameters;
     }
 
-    public BEvent(final BEvent referenceEvent, final Exception e, final String parameters)
-    {
+    public BEvent(final BEvent referenceEvent, final Exception e, final String parameters) {
         mReferenceEvent = referenceEvent;
         mParameters = parameters;
         // this is an error : keep the strack trace !
@@ -143,8 +141,7 @@ public class BEvent {
      *
      * @return
      */
-    public boolean isError()
-    {
+    public boolean isError() {
         final Level level = getLevel();
         if (level == Level.APPLICATIONERROR || level == Level.CRITICAL || level == Level.ERROR) {
             return true;
@@ -152,29 +149,42 @@ public class BEvent {
         return false;
     }
 
-
     /**
      * isSame
      * Compare the new event with this one. They are identical when the number / package / parameters are identical.
      */
-    public boolean isIdentical(final BEvent compareEvent)
-    {
-        if ( compareEvent.getNumber() == getNumber()
-                && compareEvent.getPackageName().equals( getPackageName())
-                && compareEvent.getParameters().equals( getParameters())) {
+    public boolean isIdentical(final BEvent compareEvent) {
+        if (compareEvent.getNumber() == getNumber()
+                && compareEvent.getPackageName().equals(getPackageName())
+                && compareEvent.getParameters().equals(getParameters())) {
             return true;
         }
         return false;
 
     }
+
     /**
-     * log this event, in a reference way
+     * log this event, in a reference way.
+     * All information about the event are logged (package+number, level, title, cause, consequence, actions parameters)
+     * No logger is given, then the logger used the package org.bonitasoft.log.event
      */
     public void log() {
         final Logger logger = Logger.getLogger(BEvent.class.getName());
+        log(logger);
+    }
+
+    /**
+     * log using the logger, so this is possible to configure the logger.properties to see or not this log.
+     * All information about the event are logged (package+number, level, title, cause, consequence, actions parameters)
+     * 
+     * @param logger to log on this logger
+     */
+    public void log(Logger logger) {
+
         final Level level = getLevel();
 
-        String message = "Event[" + getPackageName() + "~" + getNumber() + "] *" + level.toString() + "* " + getTitle() + " [" + getParameters() + "] -Cause:"
+        String message = "Event[" + getPackageName() + "~" + getNumber() + "] *" + level.toString() + "* " + getTitle()
+                + " [" + getParameters() + "] -Cause:"
                 + getCause();
         if (getConsequence() != null) {
             message += " -Consequence:" + getConsequence();
@@ -183,7 +193,7 @@ public class BEvent {
             message += " -Action:" + getAction();
         }
         if (mExceptionDetails != null) {
-            message+=" "+mExceptionDetails;
+            message += " " + mExceptionDetails;
         }
 
         if (level == Level.DEBUG) {
@@ -206,8 +216,7 @@ public class BEvent {
      *
      * @return
      */
-    public Map<String, Object> getJson(final boolean withHtml)
-    {
+    public Map<String, Object> getJson(final boolean withHtml) {
         final Map<String, Object> json = new HashMap<String, Object>();
         json.put("number", getNumber());
         json.put("level", getLevel().toString());
@@ -224,8 +233,13 @@ public class BEvent {
         return json;
 
     }
-    public String getHtml()
-    {
+
+    /**
+     * return a piece of HTML to display the event, using bootstrap classes
+     * 
+     * @return
+     */
+    public String getHtml() {
         final StringBuffer htmlEvent = new StringBuffer();
         htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\"><a href='#' ");
         if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
@@ -243,16 +257,21 @@ public class BEvent {
 
         if (getParameters() != null) {
             htmlEvent.append("<br><span style=\"margin-left:30px;\">" + getParameters() + "</span>");
-        if (getCause() != null) {
-                htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">Cause: " + getCause() + "</span>");
-        }
+            if (getCause() != null) {
+                htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">Cause: "
+                        + getCause() + "</span>");
+            }
         }
         if (getConsequence() != null) {
-            htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-weight: bold; font-size: 75%;\">Consequence: " + getConsequence()
-                    + "</span>");
+            htmlEvent.append(
+                    "<br><span style=\"margin-left:30px;font-style: italic;font-weight: bold; font-size: 75%;\">Consequence: "
+                            + getConsequence()
+                            + "</span>");
         }
         if (getAction() != null) {
-            htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-weight: bold; font-size: 75%;\">Action: " + getAction() + "</span>");
+            htmlEvent.append(
+                    "<br><span style=\"margin-left:30px;font-style: italic;font-weight: bold; font-size: 75%;\">Action: "
+                            + getAction() + "</span>");
         }
         htmlEvent.append("</div>");
 
@@ -264,10 +283,10 @@ public class BEvent {
      * this method is mainly for debugging
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         // don't display the cause and the action, it's mainly for debugging
-        return getPackageName() + ":" + getNumber() + " (" + getLevel().toString() + ") " + getTitle() + " " + getParameters();
+        return getPackageName() + ":" + getNumber() + " (" + getLevel().toString() + ") " + getTitle() + " "
+                + getParameters();
     }
     /* ******************************************************************************** */
     /*                                                                                  */
@@ -316,8 +335,7 @@ public class BEvent {
         return mParameters != null ? mParameters : mReferenceEvent != null ? mReferenceEvent.getParameters() : null;
     }
 
-    private String stringToJson(final String source)
-    {
+    private String stringToJson(final String source) {
         if (source == null) {
             return "";
         }

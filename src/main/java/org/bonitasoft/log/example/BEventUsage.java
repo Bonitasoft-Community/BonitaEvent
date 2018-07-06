@@ -11,10 +11,14 @@ import org.bonitasoft.log.event.BEventFactory;
 public class BEventUsage {
 
     // declare events
-    private final BEvent inputDivisionEvent = new BEvent(BEventUsage.class.getName(), 1, Level.INFO, "Calculate Division", "Run a division");
-    private final BEvent resultDivisionEvent = new BEvent(BEventUsage.class.getName(), 2, Level.SUCCESS, "Division Done", "Result of the division");
-    private final BEvent errorDivisionEvent = new BEvent(BEventUsage.class.getName(), 3, Level.ERROR, "Division Error", "An error arrive in the division",
-            "The result is not available", "Check the number you give at input : divide by 0 is not possible for example");
+    private final BEvent inputDivisionEvent = new BEvent(BEventUsage.class.getName(), 1, Level.INFO,
+            "Calculate Division", "Run a division");
+    private final BEvent resultDivisionEvent = new BEvent(BEventUsage.class.getName(), 2, Level.SUCCESS,
+            "Division Done", "Result of the division");
+    private final BEvent errorDivisionEvent = new BEvent(BEventUsage.class.getName(), 3, Level.ERROR, "Division Error",
+            "An error arrive in the division",
+            "The result is not available",
+            "Check the number you give at input : divide by 0 is not possible for example");
 
     public class DivisionResult {
 
@@ -29,16 +33,14 @@ public class BEventUsage {
      * @param b
      * @return
      */
-    public DivisionResult calculDivision(final double a, final double b)
-    {
+    public DivisionResult calculDivision(final double a, final double b) {
         final DivisionResult divisionResult = new DivisionResult();
         divisionResult.listEvents.add(new BEvent(inputDivisionEvent, "Divide " + a + " by " + b));
-        try
-        {
+        try {
             divisionResult.resultOfDivision = a / b;
-            divisionResult.listEvents.add(new BEvent(resultDivisionEvent, " Result is " + divisionResult.resultOfDivision));
-        } catch (final Exception e)
-        {
+            divisionResult.listEvents
+                    .add(new BEvent(resultDivisionEvent, " Result is " + divisionResult.resultOfDivision));
+        } catch (final Exception e) {
             final BEvent bevent = new BEvent(errorDivisionEvent, e, "Error with operand " + a + " / " + b);
             bevent.log();
 
@@ -50,17 +52,14 @@ public class BEventUsage {
     /**
      * use the method
      */
-    public void letsDivide()
-    {
+    public void letsDivide() {
         final Logger logger = Logger.getLogger(BEventUsage.class.getName());
         DivisionResult divisionResult = calculDivision(23.4, 551);
-        if (BEventFactory.isError(divisionResult.listEvents))
-        {
+        if (BEventFactory.isError(divisionResult.listEvents)) {
             logger.severe("Error ! ");
         }
         divisionResult = calculDivision(23.4, 0);
-        if (BEventFactory.isError(divisionResult.listEvents))
-        {
+        if (BEventFactory.isError(divisionResult.listEvents)) {
             logger.severe("Error ! ");
         }
     }
