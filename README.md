@@ -1,5 +1,5 @@
 # BonitaEvent
-Java Librairy to manage errors and informations. Don't throws an exception, create an event where you can give an ErrorCode, a Title, a Cause, a WhatToDo, a Consequence to the final user
+Java Library to manage errors and informations. Don't throws an exception, create an event where you can give an ErrorCode, a Title, a Cause, a WhatToDo, a Consequence to the final user
  
  Son in your software, create some events like :
     private final BEvent inputDivisionEvent = new BEvent(BEventUsage.class.getName(), 1, Level.INFO, "Calculate Division", "Run a division");
@@ -20,4 +20,4 @@ What's more ?
   - result to the user ? In the BEventFactory, you can transform the event (or the list of event) in a nice HTML view. Ready to send to the browser ! Look the custom page Ping to have an example.
          
         
- 
+ 1.2 add the BEventFactory.getSyntheticHtml() method

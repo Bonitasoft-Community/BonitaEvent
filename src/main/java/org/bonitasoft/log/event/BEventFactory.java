@@ -29,7 +29,22 @@ public class BEventFactory {
         table += "</table>";
         return table;
     }
-
+    /**
+     * create the list in a synthetic way, as a list of events
+     * @param listEvents
+     * @return
+     */
+    public static String getSyntheticHtml(final List<BEvent> listEvents) {
+      String table = "<table>";
+      for (final BEvent event : listEvents) {
+          table += "<tr><td> <span title=\""+event.getKey()+"\">" + event.getTitle() + "</td>"
+              +"<td>" + event.getLevel().toString() + "</td>"
+              +"<td>" + event.getParameters() + "</td>"
+              + "</tr>";
+      }
+      table += "</table>";
+      return table;
+  }
     /**
      * add the event in the list only if this event is a new one, in order to remove the duplication.
      * An event already exist if this is the same package/number/parameters (see BEvent.same() ).
