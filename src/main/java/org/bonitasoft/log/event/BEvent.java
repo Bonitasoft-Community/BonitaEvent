@@ -110,16 +110,37 @@ public class BEvent {
     }
 
     /**
-     * this is the common constructor in usage of event.
+     * create a Event Success with only a title.
+     */
+    public static BEvent getInstanceShortSuccess(final String packageName, final long number, final String title)
+    {
+      return new BEvent(packageName, number, Level.SUCCESS, title, null);
+    }
+    /**
+     * create a Event Success with title and the cause, to give more explanation on the success.
+     */
+    public static BEvent getInstanceSuccess(final String packageName, final long number, final String title, String cause)
+    {
+      return new BEvent(packageName, number, Level.SUCCESS, title, cause);
+    }
+    /**
+     * this is the common constructor in usage of event. A main event is referenced, which give all explanations, and the event only capture some additionnal parameters
      *
-     * @param referenceEvent
-     * @param parameters
+     * @param referenceEvent : the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file can't be openned.
+     * @param parameters : to give more explanations to the event, the parameters carry all information to send to users (example, complete fileName)
      */
     public BEvent(final BEvent referenceEvent, final String parameters) {
         mReferenceEvent = referenceEvent;
         mParameters = parameters;
     }
 
+    /**
+     * Build an event from an Exception. The referentiel event contains all informations (explanation, cause, actions) and the exception is used to complete the event. Any parameters are welcome
+     * Default Constructor.
+     * @param referenceEvent: the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file can't be openned. 
+     * @param e: the exception, to collect more information
+     * @param parameters: to give more explanations to the event, the parameters carry all information to send to users (example, complete fileName)
+     */
     public BEvent(final BEvent referenceEvent, final Exception e, final String parameters) {
         mReferenceEvent = referenceEvent;
         mParameters = parameters;
@@ -129,6 +150,7 @@ public class BEvent {
         mExceptionDetails = sw.toString();
     }
 
+    
     /* ******************************************************************************** */
     /*                                                                                  */
     /* Tools */
