@@ -184,6 +184,20 @@ public class BEvent {
         return false;
 
     }
+    
+    /**
+     * sameEvent compare the number and the packagename, not the parameters. 
+     * @param compareEvent
+     * @return
+     */
+    public boolean isSameEvent(final BEvent compareEvent) {
+      if (compareEvent.getNumber() == getNumber()
+              && compareEvent.getPackageName().equals(getPackageName())) {
+          return true;
+      }
+      return false;
+
+  }
 
     /**
      * log this event, in a reference way.
