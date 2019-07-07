@@ -22,12 +22,13 @@ public class BEventFactory {
      * @return
      */
     public static String getHtml(final List<BEvent> listEvents) {
-        String table = "<table>";
+      StringBuffer tableHtml= new StringBuffer();
+      tableHtml.append("<table>");
         for (final BEvent event : listEvents) {
-            table += "<tr><td>" + event.getHtml() + "</td></tr>";
+          tableHtml.append("<tr><td>" + event.getHtml() + "</td></tr>");
         }
-        table += "</table>";
-        return table;
+        tableHtml.append("</table>");
+        return  tableHtml.toString();
     }
     /**
      * create the list in a synthetic way, as a list of events
@@ -35,15 +36,19 @@ public class BEventFactory {
      * @return
      */
     public static String getSyntheticHtml(final List<BEvent> listEvents) {
-      String table = "<table>";
+      StringBuffer tableHtml= new StringBuffer();
+      
+      tableHtml.append( "<table style=\"border:1px solid black;border-spacing: 10px 0px;border-collapse: separate;\">");
+      tableHtml.append( "<tr><td>Title</td><td>Level</td><td>Parameters</td></tr>");
+          
       for (final BEvent event : listEvents) {
-          table += "<tr><td> <span title=\""+event.getKey()+"\">" + event.getTitle() + "</td>"
+        tableHtml.append( "<tr><td>"+event.getHtmlTitle() + "</td>"
               +"<td>" + event.getLevel().toString() + "</td>"
               +"<td>" + event.getParameters() + "</td>"
-              + "</tr>";
+              + "</tr>");
       }
-      table += "</table>";
-      return table;
+      tableHtml.append( "</table>");
+      return tableHtml.toString();
   }
     /**
      * add the event in the list only if this event is a new one, in order to remove the duplication.

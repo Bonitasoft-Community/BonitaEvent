@@ -1,6 +1,7 @@
 package org.bonitasoft.log.event;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -248,12 +249,12 @@ public class BEvent {
     /*                                                                                  */
     /* ******************************************************************************** */
     /**
-     * return the Json
+     * return a Map, which can be used to JSON the event or serialize it
      *
      * @return
      */
-    public Map<String, Object> getJson(final boolean withHtml) {
-        final Map<String, Object> json = new HashMap<String, Object>();
+    public Map<String, Serializable> getJson(final boolean withHtml) {
+        final Map<String, Serializable> json = new HashMap<String, Serializable>();
         json.put("number", getNumber());
         json.put("level", getLevel().toString());
         json.put("packageName", stringToJson(getPackageName()));
@@ -269,6 +270,25 @@ public class BEvent {
         return json;
 
     }
+    /**
+     * opposite function, assuming this is the previous function which generate the map.
+     * @param mapEvent
+     * @return
+     */
+    public static BEvent getInstanceFormJson( Map<String,Serializable> mapEvent)
+    {
+      
+      String packageName      = jsonToString( mapEvent.get("packageName"));
+      long number             = (Long) mapEvent.get("number");
+      Level level             = Level.valueOf( (String) mapEvent.get("level") );
+      String title            = jsonToString( mapEvent.get("title"));
+      String cause            = jsonToString( mapEvent.get("cause") );
+      String consequence      = jsonToString( mapEvent.get("consequence"));
+      String action           = jsonToString( mapEvent.get("action") );
+
+      BEvent event = new BEvent( packageName, number, level, title, cause, consequence, action);
+      return event;
+    }
 
     /**
      * return a piece of HTML to display the event, using bootstrap classes
@@ -277,20 +297,9 @@ public class BEvent {
      */
     public String getHtml() {
         final StringBuffer htmlEvent = new StringBuffer();
-        htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\"><a href='#' ");
-        if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
-            htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
-        } else if (getLevel() == Level.APPLICATIONERROR) {
-            htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
-        } else if (getLevel() == Level.SUCCESS) {
-            htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
-        } else {
-            htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
-        }
-        htmlEvent.append("\" title=\"" + getKey() + "\"");
-        htmlEvent.append(">" + getTitle());
-        htmlEvent.append("</a>");
+        htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\">");
 
+        htmlEvent.append( getHtmlTitle());
         if (getParameters() != null) {
             htmlEvent.append("<br><span style=\"margin-left:30px;\">" + getParameters() + "</span>");
             if (getCause() != null) {
@@ -315,6 +324,24 @@ public class BEvent {
 
     }
 
+    public String getHtmlTitle() {
+      final StringBuffer htmlEvent = new StringBuffer();
+      htmlEvent.append("<a href='#' ");
+      if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
+          htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
+      } else if (getLevel() == Level.APPLICATIONERROR) {
+          htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
+      } else if (getLevel() == Level.SUCCESS) {
+          htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
+      } else {
+          htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
+      }
+      htmlEvent.append("\" title=\"" + getKey() + "\"");
+      htmlEvent.append(">" + getTitle());
+      htmlEvent.append("</a>");
+      return htmlEvent.toString();
+    }
+    
     /**
      * this method is mainly for debugging
      */
@@ -377,4 +404,10 @@ public class BEvent {
         }
         return source.replaceAll("\"", "\\\"");
     }
+    private static String jsonToString(final Object source) {
+      if (source == null) {
+          return "";
+      }
+      return source.toString().replaceAll("\\\"", "\"");
+  }
 }
