@@ -44,7 +44,7 @@ public class BEventFactory {
       for (final BEvent event : listEvents) {
         tableHtml.append( "<tr><td>"+event.getHtmlTitle() + "</td>"
               +"<td>" + event.getLevel().toString() + "</td>"
-              +"<td>" + event.getParameters() + "</td>"
+              +"<td>" + event.getParameters() + event.getExceptionDetails() + "</td>"
               + "</tr>");
       }
       tableHtml.append( "</table>");

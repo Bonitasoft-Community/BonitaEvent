@@ -306,6 +306,11 @@ public class BEvent {
                 htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">Cause: "
                         + getCause() + "</span>");
             }
+            if (getExceptionDetails() !=null) {
+                htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">"
+                        + getExceptionDetails() + "</span>");
+            }
+                
         }
         if (getConsequence() != null) {
             htmlEvent.append(
@@ -326,17 +331,27 @@ public class BEvent {
 
     public String getHtmlTitle() {
       final StringBuffer htmlEvent = new StringBuffer();
+
+      String title = getKey();
+
       htmlEvent.append("<a href='#' ");
       if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
           htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
+          if (getConsequence()!=null && getConsequence().length()>0)
+              title += "\nConsequence:" + getConsequence();
+          title += "\nAction:" + getAction();
       } else if (getLevel() == Level.APPLICATIONERROR) {
           htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
+          if (getConsequence()!=null && getConsequence().length()>0)
+              title += "\nConsequence:" + getConsequence();
+          title += "\nAction:" + getAction();
       } else if (getLevel() == Level.SUCCESS) {
           htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
       } else {
           htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
       }
-      htmlEvent.append("\" title=\"" + getKey() + "\"");
+      
+      htmlEvent.append("\" title=\"" + title + "\"");
       htmlEvent.append(">" + getTitle());
       htmlEvent.append("</a>");
       return htmlEvent.toString();
@@ -398,6 +413,10 @@ public class BEvent {
         return mParameters != null ? mParameters : mReferenceEvent != null ? mReferenceEvent.getParameters() : null;
     }
 
+    public String getExceptionDetails() {
+        return mExceptionDetails;
+    }
+    
     private String stringToJson(final String source) {
         if (source == null) {
             return "";
