@@ -414,7 +414,7 @@ public class BEvent {
     }
 
     public String getExceptionDetails() {
-        return mExceptionDetails;
+        return mExceptionDetails==null ? "" : mExceptionDetails;
     }
     
     private String stringToJson(final String source) {

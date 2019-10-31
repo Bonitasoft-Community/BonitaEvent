@@ -50,6 +50,22 @@ public class BEventFactory {
       tableHtml.append( "</table>");
       return tableHtml.toString();
   }
+    
+    /**
+     * return a list of event for a log
+     * @param listEvents
+     * @return
+     */
+    public static String getSyntheticLog(final List<BEvent> listEvents) {
+        StringBuffer tableLog= new StringBuffer();
+        
+         
+        for (final BEvent event : listEvents) {
+            tableLog.append( event.toString()+" <~> ");
+        }
+        
+        return tableLog.toString();
+    }
     /**
      * add the event in the list only if this event is a new one, in order to remove the duplication.
      * An event already exist if this is the same package/number/parameters (see BEvent.same() ).
