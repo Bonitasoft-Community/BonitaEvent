@@ -113,21 +113,23 @@ public class BEvent {
     /**
      * create a Event Success with only a title.
      */
-    public static BEvent getInstanceShortSuccess(final String packageName, final long number, final String title)
-    {
-      return new BEvent(packageName, number, Level.SUCCESS, title, null);
+    public static BEvent getInstanceShortSuccess(final String packageName, final long number, final String title) {
+        return new BEvent(packageName, number, Level.SUCCESS, title, null);
     }
+
     /**
      * create a Event Success with title and the cause, to give more explanation on the success.
      */
-    public static BEvent getInstanceSuccess(final String packageName, final long number, final String title, String cause)
-    {
-      return new BEvent(packageName, number, Level.SUCCESS, title, cause);
+    public static BEvent getInstanceSuccess(final String packageName, final long number, final String title, String cause) {
+        return new BEvent(packageName, number, Level.SUCCESS, title, cause);
     }
+
     /**
-     * this is the common constructor in usage of event. A main event is referenced, which give all explanations, and the event only capture some additionnal parameters
+     * this is the common constructor in usage of event. A main event is referenced, which give all explanations, and the event only capture some additionnal
+     * parameters
      *
-     * @param referenceEvent : the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file can't be openned.
+     * @param referenceEvent : the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file
+     *        can't be openned.
      * @param parameters : to give more explanations to the event, the parameters carry all information to send to users (example, complete fileName)
      */
     public BEvent(final BEvent referenceEvent, final String parameters) {
@@ -136,9 +138,12 @@ public class BEvent {
     }
 
     /**
-     * Build an event from an Exception. The referentiel event contains all informations (explanation, cause, actions) and the exception is used to complete the event. Any parameters are welcome
+     * Build an event from an Exception. The referentiel event contains all informations (explanation, cause, actions) and the exception is used to complete the
+     * event. Any parameters are welcome
      * Default Constructor.
-     * @param referenceEvent: the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file can't be openned. 
+     * 
+     * @param referenceEvent: the referentiel event, which contains the level, cause, explanation, action (if errors). Example, a event to explain that a file
+     *        can't be openned.
      * @param e: the exception, to collect more information
      * @param parameters: to give more explanations to the event, the parameters carry all information to send to users (example, complete fileName)
      */
@@ -151,7 +156,6 @@ public class BEvent {
         mExceptionDetails = sw.toString();
     }
 
-    
     /* ******************************************************************************** */
     /*                                                                                  */
     /* Tools */
@@ -185,20 +189,21 @@ public class BEvent {
         return false;
 
     }
-    
+
     /**
-     * sameEvent compare the number and the packagename, not the parameters. 
+     * sameEvent compare the number and the packagename, not the parameters.
+     * 
      * @param compareEvent
      * @return
      */
     public boolean isSameEvent(final BEvent compareEvent) {
-      if (compareEvent.getNumber() == getNumber()
-              && compareEvent.getPackageName().equals(getPackageName())) {
-          return true;
-      }
-      return false;
+        if (compareEvent.getNumber() == getNumber()
+                && compareEvent.getPackageName().equals(getPackageName())) {
+            return true;
+        }
+        return false;
 
-  }
+    }
 
     /**
      * log this event, in a reference way.
@@ -270,24 +275,25 @@ public class BEvent {
         return json;
 
     }
+
     /**
      * opposite function, assuming this is the previous function which generate the map.
+     * 
      * @param mapEvent
      * @return
      */
-    public static BEvent getInstanceFormJson( Map<String,Serializable> mapEvent)
-    {
-      
-      String packageName      = jsonToString( mapEvent.get("packageName"));
-      long number             = (Long) mapEvent.get("number");
-      Level level             = Level.valueOf( (String) mapEvent.get("level") );
-      String title            = jsonToString( mapEvent.get("title"));
-      String cause            = jsonToString( mapEvent.get("cause") );
-      String consequence      = jsonToString( mapEvent.get("consequence"));
-      String action           = jsonToString( mapEvent.get("action") );
+    public static BEvent getInstanceFormJson(Map<String, Serializable> mapEvent) {
 
-      BEvent event = new BEvent( packageName, number, level, title, cause, consequence, action);
-      return event;
+        String packageName = jsonToString(mapEvent.get("packageName"));
+        long number = (Long) mapEvent.get("number");
+        Level level = Level.valueOf((String) mapEvent.get("level"));
+        String title = jsonToString(mapEvent.get("title"));
+        String cause = jsonToString(mapEvent.get("cause"));
+        String consequence = jsonToString(mapEvent.get("consequence"));
+        String action = jsonToString(mapEvent.get("action"));
+
+        BEvent event = new BEvent(packageName, number, level, title, cause, consequence, action);
+        return event;
     }
 
     /**
@@ -296,21 +302,21 @@ public class BEvent {
      * @return
      */
     public String getHtml() {
-        final StringBuffer htmlEvent = new StringBuffer();
+        final StringBuilder htmlEvent = new StringBuilder();
         htmlEvent.append("<div style=\"border:1px solid black;padding-right: 20px;\">");
 
-        htmlEvent.append( getHtmlTitle());
+        htmlEvent.append(getHtmlTitle());
         if (getParameters() != null) {
             htmlEvent.append("<br><span style=\"margin-left:30px;\">" + getParameters() + "</span>");
             if (getCause() != null) {
                 htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">Cause: "
                         + getCause() + "</span>");
             }
-            if (getExceptionDetails() !=null) {
+            if (getExceptionDetails() != null) {
                 htmlEvent.append("<br><span style=\"margin-left:30px;font-style: italic;font-size: 75%;\">"
                         + getExceptionDetails() + "</span>");
             }
-                
+
         }
         if (getConsequence() != null) {
             htmlEvent.append(
@@ -330,33 +336,34 @@ public class BEvent {
     }
 
     public String getHtmlTitle() {
-      final StringBuffer htmlEvent = new StringBuffer();
+        final StringBuilder htmlEvent = new StringBuilder();
 
-      String title = getKey();
+        StringBuilder title = new StringBuilder();
+        title.append(getKey());
 
-      htmlEvent.append("<a href='#' ");
-      if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
-          htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
-          if (getConsequence()!=null && getConsequence().length()>0)
-              title += "\nConsequence:" + getConsequence();
-          title += "\nAction:" + getAction();
-      } else if (getLevel() == Level.APPLICATIONERROR) {
-          htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
-          if (getConsequence()!=null && getConsequence().length()>0)
-              title += "\nConsequence:" + getConsequence();
-          title += "\nAction:" + getAction();
-      } else if (getLevel() == Level.SUCCESS) {
-          htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
-      } else {
-          htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
-      }
-      
-      htmlEvent.append("\" title=\"" + title + "\"");
-      htmlEvent.append(">" + getTitle());
-      htmlEvent.append("</a>");
-      return htmlEvent.toString();
+        htmlEvent.append("<a href='#' ");
+        if (getLevel() == Level.CRITICAL || getLevel() == Level.ERROR) {
+            htmlEvent.append("class=\"label label-danger\" style=\"color:white;\" ");
+            if (getConsequence() != null && getConsequence().length() > 0)
+                title.append("\nConsequence:" + getConsequence());
+            title.append("\nAction:" + getAction());
+        } else if (getLevel() == Level.APPLICATIONERROR) {
+            htmlEvent.append("class=\"label label-warning\" style=\"color:white;\" ");
+            if (getConsequence() != null && getConsequence().length() > 0)
+                title.append("\nConsequence:" + getConsequence());
+            title.append("\nAction:" + getAction());
+        } else if (getLevel() == Level.SUCCESS) {
+            htmlEvent.append("class=\"label label-success\" style=\"color:white;\" ");
+        } else {
+            htmlEvent.append("class=\"label label-info\" style=\"color:white;\" ");
+        }
+
+        htmlEvent.append("\" title=\"" + title + "\"");
+        htmlEvent.append(">" + getTitle());
+        htmlEvent.append("</a>");
+        return htmlEvent.toString();
     }
-    
+
     /**
      * this method is mainly for debugging
      */
@@ -364,7 +371,8 @@ public class BEvent {
     public String toString() {
         // don't display the cause and the action, it's mainly for debugging
         return getPackageName() + ":" + getNumber() + " (" + getLevel().toString() + ") " + getTitle() + " "
-                + getParameters();
+                + getParameters() + " "
+                + getExceptionDetails();
     }
     /* ******************************************************************************** */
     /*                                                                                  */
@@ -414,19 +422,20 @@ public class BEvent {
     }
 
     public String getExceptionDetails() {
-        return mExceptionDetails==null ? "" : mExceptionDetails;
+        return mExceptionDetails == null ? "" : mExceptionDetails;
     }
-    
+
     private String stringToJson(final String source) {
         if (source == null) {
             return "";
         }
         return source.replaceAll("\"", "\\\"");
     }
+
     private static String jsonToString(final Object source) {
-      if (source == null) {
-          return "";
-      }
-      return source.toString().replaceAll("\\\"", "\"");
-  }
+        if (source == null) {
+            return "";
+        }
+        return source.toString().replaceAll("\\\"", "\"");
+    }
 }
