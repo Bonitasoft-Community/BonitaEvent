@@ -153,7 +153,8 @@ public class BEvent {
         // this is an error : keep the strack trace !
         final StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
-        mExceptionDetails = sw.toString();
+        mExceptionDetails = sw.toString()+"<p>"+e.getMessage();
+        
     }
 
     /* ******************************************************************************** */
