@@ -22,7 +22,7 @@ public class BEventFactory {
      * @return
      */
     public static String getHtml(final List<BEvent> listEvents) {
-      StringBuffer tableHtml= new StringBuffer();
+      StringBuilder tableHtml= new StringBuilder();
       tableHtml.append("<table>");
         for (final BEvent event : listEvents) {
           tableHtml.append("<tr><td>" + event.getHtml() + "</td></tr>");
@@ -36,7 +36,7 @@ public class BEventFactory {
      * @return
      */
     public static String getSyntheticHtml(final List<BEvent> listEvents) {
-      StringBuffer tableHtml= new StringBuffer();
+        StringBuilder tableHtml= new StringBuilder();
       
       tableHtml.append( "<table style=\"border:1px solid black;border-spacing: 10px 0px;border-collapse: separate;\">");
       tableHtml.append( "<tr><td>Title</td><td>Level</td><td>Parameters</td></tr>");
@@ -57,8 +57,7 @@ public class BEventFactory {
      * @return
      */
     public static String getSyntheticLog(final List<BEvent> listEvents) {
-        StringBuffer tableLog= new StringBuffer();
-        
+        StringBuilder tableLog= new StringBuilder(); 
          
         for (final BEvent event : listEvents) {
             tableLog.append( event.toString()+" <~> ");
@@ -66,6 +65,21 @@ public class BEventFactory {
         
         return tableLog.toString();
     }
+    /**
+     * return a synthetic log only for errors
+     * @param listEvents
+     * @return
+     */
+    public static String getSyntheticErrorLog(final List<BEvent> listEvents) {
+        StringBuilder tableLog= new StringBuilder(); 
+        
+        for (final BEvent event : listEvents) {
+            if (event.isError())
+                tableLog.append( event.toString()+" <~> ");
+        }   
+        return tableLog.toString();
+    }
+ 
     /**
      * add the event in the list only if this event is a new one, in order to remove the duplication.
      * An event already exist if this is the same package/number/parameters (see BEvent.same() ).
