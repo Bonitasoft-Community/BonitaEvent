@@ -44,7 +44,7 @@ public class BEvent {
 
     public String mExceptionDetails;
     private final BEvent mReferenceEvent; // event reference
-    private final String mParameters; // optional parameters
+    private String mParameters; // optional parameters
 
     /* ******************************************************************************** */
     /*                                                                                  */
@@ -157,6 +157,11 @@ public class BEvent {
         
     }
 
+    public void addParameter( String parameter ) {
+        if (this.mParameters==null)
+            this.mParameters="";
+        this.mParameters += parameter;
+    }
     /* ******************************************************************************** */
     /*                                                                                  */
     /* Tools */
@@ -292,8 +297,10 @@ public class BEvent {
         String cause = jsonToString(mapEvent.get("cause"));
         String consequence = jsonToString(mapEvent.get("consequence"));
         String action = jsonToString(mapEvent.get("action"));
+        String parameters = jsonToString(mapEvent.get("parameters"));
 
         BEvent event = new BEvent(packageName, number, level, title, cause, consequence, action);
+        event.mParameters = parameters;
         return event;
     }
 
