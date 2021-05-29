@@ -8,7 +8,7 @@ Java Library to manage errors and informations. Don't throws an exception, creat
      
     On a INFO or SUCCESS event, the title and the cause are enougth.
     On a error (APPLICATIONERROR, ERROR), you must give the cause, but the consequence (here, the consequence is that the result is not available) and the action to perform to solve the issue. 
-    Who are the best to give theses information ? The developper of course.
+    Who are the best to give theses information ? The developper.
      
      When you want to use the event, you can give parameters (interresting to give in the event the divider isn't ?). So this event is created in reference of the ErrorDivision, with the exeption in parameters 
      
